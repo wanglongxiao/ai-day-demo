@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import unittest
-from pathlib import Path
 from types import SimpleNamespace
 
 from aiday_demo.video_client import (
@@ -32,11 +31,10 @@ class VideoClientTest(unittest.TestCase):
             content_generation=SimpleNamespace(tasks=self.tasks)
         )
 
-    def test_packaged_prompt_matches_docs_source(self) -> None:
-        source = (
-            Path(__file__).parents[1] / "docs" / "prompt_cantonese.txt"
-        ).read_text(encoding="utf-8").strip()
-        self.assertEqual(VIDEO_PROMPT, source)
+    def test_packaged_prompt_is_loaded_and_wellformed(self) -> None:
+        # The packaged src/aiday_demo/prompt_cantonese.txt is the single source
+        # of truth at runtime (docs/ is not shipped/committed).
+        self.assertTrue(VIDEO_PROMPT)
         self.assertIn("全片没有背景音乐，只有环境音效和角色对白", VIDEO_PROMPT)
         self.assertIn("无 BGM", VIDEO_PROMPT)
 

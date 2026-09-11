@@ -15,7 +15,7 @@ page later and download the finished video.
   4. Generate with `dreamina-seedance-2-5-260628`. The portrait is **Image 1**;
      two fixed visual references are **Image 2** and **Image 3**. All three are
      passed strictly as `asset://<asset-id>`, never as raw image URLs. The full
-     prompt is packaged from `docs/prompt_cantonese.txt`, prefixed with
+     prompt is loaded from `src/aiday_demo/prompt_cantonese.txt`, prefixed with
      `人物性别是 - 男性。` or `人物性别是 - 女性。`. Auto-retry up to **3**
      times on failure.
   5. Re-host the signed video into the public bucket and verify readability.
@@ -53,7 +53,7 @@ src/aiday_demo/
   config.py         # .env loader + settings
   tos_store.py      # TOS upload/read, public-read, content-type normalization
   asset_library.py  # signed AK/SK OpenAPI (CreateAssetGroup/CreateAsset/GetAsset)
-  prompt_cantonese.txt # deployable exact copy of docs/prompt_cantonese.txt
+  prompt_cantonese.txt # Seedance video prompt (single source of truth)
   video_client.py   # SeeDance-2.5 generation (asset:// reference)
   task_manager.py   # task lifecycle + background worker, state on TOS
   server.py         # FastAPI routes + static SPA
