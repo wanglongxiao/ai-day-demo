@@ -1,0 +1,19 @@
+# Secrets & local config (never commit)
+.env
+.env.*
+!.env.example
+
+# Docs are not tracked in GitHub (contain API refs / demo assets)
+docs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.python-version
+
+# OS
+.DS_Store
+
+# Local runtime
+*.log

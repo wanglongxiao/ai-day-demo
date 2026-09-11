@@ -1,0 +1,61 @@
+window.I18N = {
+  en: {
+    title: "Step into the Lead Role with Lumina (Powered by Dreamina Seedance 2.5)",
+    language_label: "Language",
+    demo_alt: "Lumina video experience preview",
+    preview_alt: "Uploaded photo preview",
+    qr_alt: "Video task QR code",
+    result_video_label: "Generated video",
+    upload_label:
+      "Upload a front-facing half-body portrait; the face must occupy at least 1/5 of the image",
+    gender_label: "Gender",
+    gender_male: "Male",
+    gender_female: "Female",
+    generate_btn: "Generate Video",
+    submitted_notice:
+      "Your video is being generated. Due to high demand, please wait. Save the QR code first — you can scan it in about 20 minutes to download the video. The file will remain in the cloud for only 24 hours.",
+    task_generating: "Your video is still being generated..",
+    task_succeeded:
+      "Your ‘BytePlus AIDay @ Hong Kong 2026’ video is ready. Please download it below.",
+    task_expired: "Your video is over 24 hours old and has been cleaned up..",
+    task_failed: "Generation failed. Please try again.",
+    download_btn: "Download Video",
+    back_home: "← Back to home",
+    gate_title: "Access",
+    gate_ph: "Password",
+    gate_btn: "Enter",
+    gate_err: "Wrong password",
+    err_need_image: "Please upload a front-facing photo.",
+    err_need_gender: "Please select a gender first.",
+  },
+  "zh-TW": {
+    title: "Step into the Lead Role with Lumina (Powered by Dreamina Seedance 2.5)",
+    language_label: "語言",
+    demo_alt: "Lumina 影片體驗預覽",
+    preview_alt: "上傳相片預覽",
+    qr_alt: "影片任務 QR Code",
+    result_video_label: "生成的影片",
+    upload_label: "上傳正面半身相，面部佔比不小於 1/5",
+    gender_label: "性別",
+    gender_male: "男性",
+    gender_female: "女性",
+    generate_btn: "生成影片",
+    submitted_notice:
+      "影片生成中！因體驗人數較多，敬請稍候。請先儲存 QR Code，預計 20 分鐘之後可掃描 QR Code 下載影片，檔案於雲端僅保留 24 小時。",
+    task_generating: "您的影片仍在生成中..",
+    task_succeeded: "您的『BytePlus AIDay @ Hong Kong 2026』影片已經生成完畢，請下載。",
+    task_expired: "您的影片超過了 24 小時，已經被清理..",
+    task_failed: "生成失敗，請重試。",
+    download_btn: "下載影片",
+    back_home: "← 返回首頁",
+    gate_title: "存取驗證",
+    gate_ph: "存取密碼",
+    gate_btn: "進入",
+    gate_err: "密碼錯誤",
+    err_need_image: "請上傳正面照片。",
+    err_need_gender: "請先選擇性別。",
+  },
+};
+
+window.SUPPORTED_LANGS = ["zh-TW", "en"];
+window.DEFAULT_LANG = "zh-TW";
