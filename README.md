@@ -1,5 +1,7 @@
 # aiday-demo · Lumina · Dreamina Seedance 2.5
 
+**▶ Try it live: https://sb49b8gjjq9re93olk19e.apigateway-ap-southeast-1.apigw-byteplus.com/**
+
 Select a gender and upload a front-facing half-body portrait. The app registers
 the portrait in the Private Virtual Portrait Library and asynchronously creates
 a cinematic Hong Kong video with **Dreamina Seedance 2.5**. Each submitted
@@ -123,80 +125,12 @@ uv sync
 `server.log` (git-ignored), and then follows it like `tail -f server.log`.
 Ctrl-C stops the log stream; the server keeps running (use `stop` to kill it).
 
-Run the local unit tests without calling cloud APIs:
-
-```bash
-PYTHONPATH=src .venv/bin/python -m unittest discover -s tests -v
-```
-
 Or run it in the foreground directly:
 
 ```bash
 .venv/bin/python -m aiday_demo
 # → http://127.0.0.1:8000/
 ```
-
-## Cloud deployment (Byteplus veFaaS + API Gateway)
-
-Region `ap-southeast-1`. All secrets are passed as function **Envs** (never in the
-code zip or repo). Deployment artifacts:
-
-- [run.sh](run.sh) — native-python runtime entrypoint (uvicorn on port 8000,
-  `PYTHONPATH=src`, single worker; scaling is by instances, state lives in TOS).
-- [requirements.txt](requirements.txt) — deps installed by veFaaS
-  `CreateDependencyInstallTask` (includes the arkruntime SDK's vendored
-  transitive deps: `sniffio`, `anyio`, `httpx`, `distro`, …).
-
-Deploy flow with the `bp` CLI (profile `aiday`):
-
-```bash
-# 1. configure credentials
-bp configure set --profile aiday --region ap-southeast-1 \
-  --access-key <AK> --secret-key <SK>
-
-# 2. package (exclude .env/docs/.venv)
-zip -r deploy.zip run.sh requirements.txt src app \
-  -x "*/__pycache__/*" -x "*.pyc"
-
-# 3. create function (secrets via --Envs), commit code (base64 inline zip)
-bp vefaas CreateFunction ---profile aiday ---region ap-southeast-1 --body @create_fn.json
-bp vefaas UpdateFunction ---profile aiday ---region ap-southeast-1 \
-  --Id <fnId> --SourceType zip --Source "$(base64 < deploy.zip | tr -d '\n')"
-
-# 4. install deps, then release  (RE-RUN deps install after every code update!)
-bp vefaas CreateDependencyInstallTask ---profile aiday ---region ap-southeast-1 --FunctionId <fnId>
-bp vefaas UpdateFunctionResource ---profile aiday ---region ap-southeast-1 \
-  --FunctionId <fnId> --MinInstance 15 --MaxInstance 25
-bp vefaas Release ---profile aiday ---region ap-southeast-1 --FunctionId <fnId> \
-  --MaxInstance 25 --RollingStep 100 --TargetTrafficWeight 100
-
-# 5. bind API gateway: service -> veFaas upstream -> route (path "/" all methods)
-bp apig CreateGatewayService ---profile aiday ---region ap-southeast-1 --body @svc.json
-bp apig CreateUpstream ---profile aiday ---region ap-southeast-1 --body @upstream.json   # SourceType=VeFaas
-bp apig20221112 CreateRoute ---profile aiday ---region ap-southeast-1 --body @route.json
-```
-
-After `CreateRoute` the gateway prints the public HTTPS domain — that is the
-final Web UI URL. The concrete function / gateway / route ids are
-deployment-specific (kept out of this repo); read them back from
-`bp vefaas GetFunction` and `bp apig` list commands for your own account.
-
-### Multi-instance safety (elastic + idle-recycle)
-
-veFaaS runs many stateless instances and recycles idle ones. The app is built
-for that:
-
-1. **Non-blocking endpoints** — submit/poll return immediately; generation runs
-   off-request in a bounded per-instance thread pool.
-2. **State in TOS** — every task's state is `tasks/<task_id>/state.json`; any
-   instance can serve any task. Windows never collide (unique task_id paths).
-3. **Stable task_id reconnect + self-heal** — a short TOS lease (owner +
-   expiry), acquired through an ETag conditional write, ensures only one
-   instance drives a task at a time. If
-   the owning instance is recycled, the lease lapses and the next poll on *any*
-   instance transparently resumes the task (asset/ark ids are persisted and each
-   step is idempotent). Stale/late workers are ignored — no cross-task races, no
-   gateway lock-ups.
 
 ## Key endpoints
 

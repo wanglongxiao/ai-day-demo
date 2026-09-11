@@ -9,6 +9,9 @@ DEPLOYMENT.local.md
 # Docs are not tracked in GitHub (contain API refs / demo assets)
 docs/
 
+# Tests are not tracked in GitHub
+tests/
+
 # Python
 __pycache__/
 *.pyc
