@@ -3,6 +3,9 @@
 .env.*
 !.env.example
 
+# Local deployment notes (cloud resource ids — never commit)
+DEPLOYMENT.local.md
+
 # Docs are not tracked in GitHub (contain API refs / demo assets)
 docs/
 
